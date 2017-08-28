@@ -5,13 +5,12 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
-
 from django.contrib.auth import login, authenticate
 from pyhunter import PyHunter
 from .serializers import UserSerializer, PostSerializer
 from .models import User, Post
-import clearbit
-User
+
+#User
 class AuthRegister(APIView):
     """
     Register a new user.
@@ -20,7 +19,6 @@ class AuthRegister(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, format=None):
-        clearbit.key = 'sk_a58ce3ff299332066447fe9eba0f0543'
         hunterAPI = '5aa57f6c3b4600d3a881a0d2b38e9311e5b91640'
         email = request.data.get('email')
         hunter = PyHunter(hunterAPI)
@@ -29,15 +27,10 @@ class AuthRegister(APIView):
             return Response({'status': 'Incorrect data',
             'message': 'E-mail not deliverable'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-            #enrichjson = 'blank'
             if not request.data._mutable:
                 request.data._mutable = True
-            #lookup = clearbit.Enrichment.find(email=email, stream=True)
-            #if lookup != None:
-              #enrichjson = (json.dumps(lookup['person'], sort_keys=True, indent=4))
-             # print(enrichjson)
+
             serializer = self.serializer_class(data=request.data)
-            #request.data['enrich_json'] = enrichjson
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
