@@ -96,16 +96,26 @@ class LikeList(APIView):
         like = (request.GET.get('like'))
         userid = request.user.id
         Posts = get_object_or_404(Post, id=post_id)
-        print("Like is ", like) # testing purposes
-        print("PostID is ", post_id)
-        print("USER IS ", userid)
+        #print("Like is ", like) # testing purposes
+        #print("PostID is ", post_id)
+        #print("USER IS ", userid)
         if(like != 'false'):
             Posts.likers.add(userid) #adds the like to the db
         elif(like == 'false'):
-            Posts.likers.remove(userid) #removes the like
-
+            Posts.likers.remove(userid) #removes the like aka unlike
         serializer = PostSerializer(data=Posts)
         if serializer.is_valid():
             serializer.save() #saves it
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class UserList(APIView):
+    serializer_class = UserSerializer
+    def get(self,request, format=None):
+        username = request.GET.get('username')
+        if(username!=None):
+            Users=get_object_or_404(User,username=username)
+            serializer = UserSerializer(Users,many=False, context={'request': request})
+        else:
+            Users = User.objects.all()
+            serializer = UserSerializer(Users, many=True, context={'request': request})
+        return Response(serializer.data)

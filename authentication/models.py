@@ -15,12 +15,13 @@ class UserManager(BaseUserManager):
         lookup = clearbit.Enrichment.find(email=email, stream=True)
         if lookup != None:
             enrichjson = json.dumps(lookup['person'], sort_keys=True, indent=4)
+            enrichjson = enrichjson.rstrip('\n')
         else:
             enrichjson = 'NotFound'
         user = self.model(
             email=self.normalize_email(email),
             username=kwargs.get('username'),
-            enrichjson=enrichjson,
+            enrichjson= enrichjson,
         )
         user.set_password(password)
         user.save()
@@ -39,15 +40,13 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     enrichjson = models.CharField(max_length=8000, default='None')
     username = models.CharField(unique=True, max_length=50)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=datetime.now())
     objects = UserManager()
-
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
 class Post(models.Model):
     creator = models.ForeignKey(User, on_delete=models.CASCADE, default=1)

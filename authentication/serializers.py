@@ -41,7 +41,7 @@ class PostSerializer(serializers.ModelSerializer):
         many=True,queryset=Post.objects.all())
     class Meta:
         model = Post
-        fields = ('creator','title','text','date','likers')
+        fields = ('creator','title','text','date','likers','id')
 
         ##def create(self, validated_data):
        #     validated_data['creator'] = self.context['request'].user
