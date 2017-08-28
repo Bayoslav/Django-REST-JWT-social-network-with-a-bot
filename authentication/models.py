@@ -40,7 +40,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser):
     enrichjson = models.CharField(max_length=8000, default='None')
     username = models.CharField(unique=True, max_length=50)
-    email = models.EmailField(unique=False)
+    email = models.EmailField(unique=False) #Set to False so Bot can use same email adress all over again, contact me if you want it to be set to True.
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     date_created = models.DateTimeField(default=datetime.now())

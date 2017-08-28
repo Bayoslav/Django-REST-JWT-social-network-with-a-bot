@@ -36,29 +36,6 @@ class AuthRegister(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-class AuthLogin(APIView):
-    ''' Manual implementation of login method '''
-    def post(self, request, format=None):
-        data = request.data
-        username = data.get('username', None)
-        #email = data.get('email', None)
-        password = data.get('password', None)
-
-        User = authenticate(username=username, password=password)
-        # Generate token and add it to the response object
-        if User is not None:
-            login(request, User)
-            return Response({
-                'status': 'Successful',
-                'message': 'You have successfully been logged into your account.'
-            }, status=status.HTTP_200_OK)
-
-        return Response({
-            'status': 'Unauthorized',
-            'message': 'Username/password combination invalid.'
-        }, status=status.HTTP_401_UNAUTHORIZED)
-
 class PostList(APIView):
     #lists posts
     def get(self,request, format=None):
