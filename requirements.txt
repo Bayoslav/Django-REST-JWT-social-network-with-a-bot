@@ -6,7 +6,7 @@ djangorestframework==3.6.4
 djangorestframework-jwt==1.11.0
 idna==2.6
 pyhunter==0.2.2
-PyJWT==1.5.2
+PyJWT==2.4.0
 pytz==2017.2
 requests==2.18.4
 urllib3==1.22
